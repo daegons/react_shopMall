@@ -8,7 +8,11 @@ const ProductList = (props) => {
     //propsList = 객체 형식으로 012 순회
     return (
       <div className="col-md-3" key={i}>
-        <img src={`${road}/assets/${i + 1}.jpg`} alt="상품 이미지" width="80%" />
+        <img
+          src={`${road}/assets/${i + 1}.jpg`}
+          alt="상품 이미지"
+          width="80%"
+        />
         <h4>{propsList.title}</h4>
         <p>{propsList.content}</p>
         <p>{propsList.price}₩</p>
