@@ -1,18 +1,18 @@
-import Container from 'react-bootstrap/Container';
-import './App.css';
+import Container from "react-bootstrap/Container";
+import "./App.css";
 
 //data.js import
-import data from './data';
+import Data from "./Data";
 
 //Navbar bootstrap import
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import { useState } from 'react';
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import { useState } from "react";
 
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import Main from './pages/Main';
-import Detail from './pages/Detail';
-import ProductList from './components/ProductList';
+import { Route, Routes, useNavigate } from "react-router-dom";
+import Main from "./pages/Main";
+import Detail from "./pages/Detail";
+import axios from "axios";
 // import About from './pages/About';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // bootstrap 사이트에서 이import로 안해주면 오류생김
@@ -22,9 +22,22 @@ import ProductList from './components/ProductList';
 function App() {
   // const road = process.env.PUBLIC_URL;
 
-  const [shoes] = useState(data);
-  const navigate = useNavigate();
+  // const getShoesData = () => {
+  //   axios
+  //     .get(
+  //       "https://raw.githubusercontent.com/Stupidism/goat-sneakers/master/api.json"
+  //     )
+  //     .then((res) => {
+  //       console.log(res.data);
+  //     })
+  //     .catch(() => {
+  //       console.log("데이터가 없어유...");
+  //     });
+  // };
 
+  const [shoes, setShoes] = useState(Data);
+  // console.log(shoes);
+  const navigate = useNavigate();
   return (
     <div className="App">
       <Navbar bg="light" variant="light" className="navbar">
@@ -35,14 +48,14 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link
               onClick={() => {
-                navigate('/');
+                navigate("/");
               }}
             >
               홈
             </Nav.Link>
             <Nav.Link
               onClick={() => {
-                navigate('/detail/');
+                navigate("/detail/");
               }}
             >
               상세페이지
@@ -64,12 +77,24 @@ function App() {
         {/* <Route path="*" element={<div>잘 생각해바.. 입력 바르게 했나..</div>} /> */}
         {/* <Route path="/about" element={<div>about 페이지</div>} /> */}
       </Routes>
-      <div className="main_img"></div>
-
-      <div className="container">
-        <div className="row">
-          <ProductList shoes={shoes} />
-        </div>
+      <div className="axios_Btn">
+        <button
+          //엑시오스 설치 후
+          //https://github.com/Stupidism/goat-sneakers/blob/master/api.json 깃 데이터 활용
+          onClick={() => {
+            axios
+              .get("https://codingapple1.github.io/shop/data2.json")
+              .then((res) => {
+                console.log(res.data);
+                console.log(shoes);
+              })
+              .catch(() => {
+                console.log("데이터가 없어유...");
+              });
+          }}
+        >
+          Ajax
+        </button>
       </div>
     </div>
   );

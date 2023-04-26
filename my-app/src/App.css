@@ -16,3 +16,6 @@ font-family: "Nanum Pen Script", cursive; 가장 아래 왼쪽부터 속성을 �
 .container .row {
   font-family: "Nanum Pen Script", cursive;
 }
+.axios_Btn {
+  text-align: center;
+}
