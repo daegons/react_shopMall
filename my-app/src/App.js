@@ -1,18 +1,18 @@
-import Container from "react-bootstrap/Container";
-import "./App.css";
+import Container from 'react-bootstrap/Container';
+import './App.css';
 
 //data.js import
-import Data from "./Data";
+import Data from './Data';
 
 //Navbar bootstrap import
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import { useState } from "react";
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import { useState } from 'react';
 
-import { Route, Routes, useNavigate } from "react-router-dom";
-import Main from "./pages/Main";
-import Detail from "./pages/Detail";
-import axios from "axios";
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import Main from './pages/Main';
+import Detail from './pages/Detail';
+import axios from 'axios';
 // import About from './pages/About';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // bootstrap 사이트에서 이import로 안해주면 오류생김
@@ -36,7 +36,7 @@ function App() {
   // };
 
   const [shoes, setShoes] = useState(Data);
-  // console.log(shoes);
+
   const navigate = useNavigate();
   return (
     <div className="App">
@@ -48,14 +48,14 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link
               onClick={() => {
-                navigate("/");
+                navigate('/');
               }}
             >
               홈
             </Nav.Link>
             <Nav.Link
               onClick={() => {
-                navigate("/detail/");
+                navigate('/detail/');
               }}
             >
               상세페이지
@@ -83,13 +83,18 @@ function App() {
           //https://github.com/Stupidism/goat-sneakers/blob/master/api.json 깃 데이터 활용
           onClick={() => {
             axios
-              .get("https://codingapple1.github.io/shop/data2.json")
+              .get(
+                'https://raw.githubusercontent.com/daegons/react_shopMall/main/api.json'
+              )
               .then((res) => {
                 console.log(res.data);
                 console.log(shoes);
+                let copy = [...shoes, ...res.data];
+                console.log(copy);
+                setShoes(copy);
               })
               .catch(() => {
-                console.log("데이터가 없어유...");
+                console.log('데이터가 없어유...');
               });
           }}
         >
