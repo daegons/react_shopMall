@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Yeon+Sung&display=swap");
+/* font-family: "Yeon Sung", cursive;
+font-family: "Nanum Pen Script", cursive; 가장 아래 왼쪽부터 속성을 따름 */
+
+.start {
+  opacity: 0;
+}
+
+.end {
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+.App .navbar {
+  font-family: "Yeon Sung", cursive;
+}
+
+.main_img {
+  height: 350px;
+
+  background-image: url("../public/assets/mainNike.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.container .row {
+  font-family: "Nanum Pen Script", cursive;
+}
+.axios_Btn {
+  text-align: center;
+}
