@@ -1,8 +1,16 @@
 import { Table } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { changeName } from "../store";
 
 const Cart = () => {
+  let state = useSelector((state) => {
+    return state;
+  });
+  let dispatch = useDispatch();
+  console.log(state.cart[0].name);
   return (
     <div>
+      {state.user}의 장바구니
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -13,12 +21,24 @@ const Cart = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>하위</td>
-            <td>하위</td>
-            <td>하위</td>
-          </tr>
+          {state.cart.map((list) => {
+            return (
+              <tr key={list.id}>
+                <td>1</td>
+                <td>{list.name}</td>
+                <td>{list.count}</td>
+                <td>
+                  <button
+                    onClick={() => {
+                      dispatch(changeName());
+                    }}
+                  >
+                    +
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </div>
