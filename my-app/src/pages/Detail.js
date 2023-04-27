@@ -1,4 +1,6 @@
+// import "./Detail.css";
 import { useEffect, useState } from "react";
+import { Nav } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 // const Btn = styled.button`
@@ -16,8 +18,8 @@ const Detail = (props) => {
   // return list.id === parseInt(id);
   const findShoes = props.shoes.find((list) => list.id == id);
 
-  const [count, setCount] = useState(0);
   const [alert, setAlert] = useState(true);
+  const [tab, setTab] = useState(0);
 
   useEffect(() => {
     let a = setTimeout(() => {
@@ -38,21 +40,33 @@ const Detail = (props) => {
   //     3.unmount할때마다 1회 코드 실행하고 싶으면
   //   }
   // },[])
+  const TabContent = ({ tab }) => {
+    const [fade, setFade] = useState("");
 
+    //tab이 변경될때마다 실행
+    useEffect(() => {
+      let a = setTimeout(() => {
+        setFade("end");
+      }, 10);
+
+      return () => {
+        clearTimeout(a);
+        setFade("");
+      };
+    }, [tab]);
+
+    return (
+      <div className={`start ${fade}`}>
+        {[<div>내용1</div>, <div>내용2</div>, <div>내용3</div>][tab]}
+      </div>
+    );
+  };
   return (
     <div className="container">
       {alert === true ? (
         <div className="alert alert-primary  ">5초이내 구매시 80% 할인</div>
       ) : null}
 
-      {count}
-      <button
-        onClick={() => {
-          setCount(count + 1);
-        }}
-      >
-        버튼
-      </button>
       {/* <Btn bg="orange" color="green">
         버튼
       </Btn>
@@ -73,7 +87,44 @@ const Detail = (props) => {
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
+      <Nav variant="tabs" defaultActiveKey="link0">
+        <Nav.Item>
+          <Nav.Link
+            onClick={() => {
+              setTab(0);
+            }}
+            eventKey="link0"
+          >
+            버튼1
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            onClick={() => {
+              setTab(1);
+            }}
+            eventKey="link1"
+          >
+            버튼2
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            onClick={() => {
+              setTab(2);
+            }}
+            eventKey="link2"
+          >
+            버튼3
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
+      {/* {tab === 0 ? <div>내용0</div> : null}
+      {tab === 1 ? <div>내용1</div> : null}
+      {tab === 2 ? <div>내용2</div> : null} */}
+      <TabContent tab={tab} />
     </div>
   );
 };
+
 export default Detail;

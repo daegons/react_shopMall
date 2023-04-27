@@ -1,3 +1,4 @@
+import axios from "axios";
 import ProductList from "../components/ProductList";
 
 const Main = (props) => {
@@ -9,6 +10,30 @@ const Main = (props) => {
         <div className="row">
           <ProductList shoes={props.shoes} />
         </div>
+      </div>
+      <div className="axios_Btn">
+        <button
+          //엑시오스 설치 후
+          //https://github.com/Stupidism/goat-sneakers/blob/master/api.json 깃 데이터 활용
+          onClick={() => {
+            axios
+              .get(
+                "https://raw.githubusercontent.com/daegons/react_shopMall/main/api.json"
+              )
+              .then((res) => {
+                console.log(res.data);
+                console.log(props.shoes);
+                let copy = [...props.shoes, ...res.data];
+                console.log(copy);
+                props.setShoes(copy);
+              })
+              .catch(() => {
+                console.log("데이터가 없어유...");
+              });
+          }}
+        >
+          Ajax
+        </button>
       </div>
     </>
   );
