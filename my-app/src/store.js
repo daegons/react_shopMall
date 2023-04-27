@@ -1,31 +1,27 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
-
-const user = createSlice({
-  name: "user",
-  initialState: "kim",
-  //=======state 수정 방법
-  reducers: {
-    changeName(state) {
-      //state = kim 기존
-      return "daegon song";
-    },
-    //========추가시에는
-    // 함수작명(){
-
-    // }
-  },
-});
-//state 변경 함수들을 담음
-// user.actions
-export let { changeName } = user.actions;
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+import user from './store/userSlice';
 
 let cart = createSlice({
-  name: "cart",
+  name: 'cart',
   initialState: [
-    { id: 0, name: "White and Black", count: 2 },
-    { id: 2, name: "Grey Yordan", count: 1 },
+    { id: 0, name: 'White and Black', count: 2 },
+    { id: 2, name: 'Grey Yordan', count: 1 },
   ],
+  reducers: {
+    addCount(state, action) {
+      let num = state.findIndex((a) => {
+        return a.id === action.payload;
+      });
+      state[num].count++;
+    },
+    addItem(state, action) {
+      state.push(action.payload);
+    },
+  },
 });
+
+export let { addCount, addItem } = cart.actions;
+
 export default configureStore({
   reducer: {
     //  작명:user.reducer

@@ -1,7 +1,9 @@
 // import "./Detail.css";
-import { useEffect, useState } from "react";
-import { Nav } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Nav } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import { addItem } from '../store';
+import { useDispatch } from 'react-redux';
 
 // const Btn = styled.button`
 //   // 문법이라기보단 그냥 사용법
@@ -13,6 +15,7 @@ import { useParams } from "react-router-dom";
 
 const Detail = (props) => {
   const road = process.env.PUBLIC_URL;
+  const dispatch = useDispatch();
   const { id } = useParams();
   //parseInt로 id 입력시 숫자로 처리하므로써 ===강력 비교 성공
   // return list.id === parseInt(id);
@@ -25,10 +28,10 @@ const Detail = (props) => {
     let a = setTimeout(() => {
       setAlert(false);
     }, 5000);
-    console.log("setTimeout");
+    console.log('setTimeout');
     return () => {
       //여기 코드는 useEffect 동작하기전에  실행됨
-      console.log("clearTimeout");
+      console.log('clearTimeout');
       clearTimeout(a);
     };
   }); //[] 처음 마운트 될때 1회만 동작
@@ -40,18 +43,32 @@ const Detail = (props) => {
   //     3.unmount할때마다 1회 코드 실행하고 싶으면
   //   }
   // },[])
+
+  useEffect(() => {
+    let localGet = localStorage.getItem('watched');
+
+    localGet = JSON.parse(localGet);
+    //신발 마다 detail페이지 넘어갈때마다 신발 id로 로컬에 푸쉬
+    localGet.push(findShoes.id);
+    //중복 제거 방법 v
+    localGet = new Set(localGet);
+    localGet = Array.from(localGet);
+    //중복 제거 방법 ^
+    localStorage.setItem('watched', JSON.stringify(localGet));
+  }, []);
+
   const TabContent = ({ tab }) => {
-    const [fade, setFade] = useState("");
+    const [fade, setFade] = useState('');
 
     //tab이 변경될때마다 실행
     useEffect(() => {
       let a = setTimeout(() => {
-        setFade("end");
+        setFade('end');
       }, 10);
 
       return () => {
         clearTimeout(a);
-        setFade("");
+        setFade('');
       };
     }, [tab]);
 
@@ -61,6 +78,7 @@ const Detail = (props) => {
       </div>
     );
   };
+
   return (
     <div className="container">
       {alert === true ? (
@@ -84,7 +102,22 @@ const Detail = (props) => {
           <h4 className="pt-5">{findShoes.title}</h4>
           <p>{findShoes.content}</p>
           <p>{findShoes.price}</p>
-          <button className="btn btn-danger">주문하기</button>
+
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              dispatch(
+                addItem({
+                  id: findShoes.id,
+                  name: findShoes.title,
+                  //카운트도 어떻게 처리할지 고민중
+                  count: 1,
+                })
+              );
+            }}
+          >
+            주문하기
+          </button>
         </div>
       </div>
       <Nav variant="tabs" defaultActiveKey="link0">
