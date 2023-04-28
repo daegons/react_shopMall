@@ -1,9 +1,9 @@
 // import "./Detail.css";
-import { useEffect, useState } from 'react';
-import { Nav } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
-import { addItem } from '../store';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from "react";
+import { Nav } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { addItem } from "../store";
+import { useDispatch } from "react-redux";
 
 // const Btn = styled.button`
 //   // 문법이라기보단 그냥 사용법
@@ -28,10 +28,10 @@ const Detail = (props) => {
     let a = setTimeout(() => {
       setAlert(false);
     }, 5000);
-    console.log('setTimeout');
+    console.log("setTimeout");
     return () => {
       //여기 코드는 useEffect 동작하기전에  실행됨
-      console.log('clearTimeout');
+      console.log("clearTimeout");
       clearTimeout(a);
     };
   }); //[] 처음 마운트 될때 1회만 동작
@@ -45,7 +45,7 @@ const Detail = (props) => {
   // },[])
 
   useEffect(() => {
-    let localGet = localStorage.getItem('watched');
+    let localGet = localStorage.getItem("watched");
 
     localGet = JSON.parse(localGet);
     //신발 마다 detail페이지 넘어갈때마다 신발 id로 로컬에 푸쉬
@@ -54,21 +54,21 @@ const Detail = (props) => {
     localGet = new Set(localGet);
     localGet = Array.from(localGet);
     //중복 제거 방법 ^
-    localStorage.setItem('watched', JSON.stringify(localGet));
+    localStorage.setItem("watched", JSON.stringify(localGet));
   }, []);
 
   const TabContent = ({ tab }) => {
-    const [fade, setFade] = useState('');
+    const [fade, setFade] = useState("");
 
     //tab이 변경될때마다 실행
     useEffect(() => {
       let a = setTimeout(() => {
-        setFade('end');
+        setFade("end");
       }, 10);
 
       return () => {
         clearTimeout(a);
-        setFade('');
+        setFade("");
       };
     }, [tab]);
 

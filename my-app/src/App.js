@@ -1,18 +1,20 @@
-import Container from 'react-bootstrap/Container';
-import './App.css';
+import Container from "react-bootstrap/Container";
+import "./App.css";
 
 //data.js import
-import Data from './Data';
+import Data from "./Data";
 
 //Navbar bootstrap import
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import { useEffect, useState } from 'react';
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import { useEffect, useState } from "react";
 
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import Main from './pages/Main';
-import Detail from './pages/Detail';
-import Cart from './pages/Cart';
+import { Route, Routes, useNavigate } from "react-router-dom";
+import Main from "./pages/Main";
+import Detail from "./pages/Detail";
+import Cart from "./pages/Cart";
+import axios from "axios";
+import { useQuery } from "react-query";
 
 // import About from './pages/About';
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -34,28 +36,19 @@ import Cart from './pages/Cart';
 
 function App() {
   //이거로 에러 해결
+  let get_local = JSON.parse(localStorage.getItem("watched"));
   //원인 추측은 localStorage.setItem('watched', JSON.stringify([])); 값이 초반에 입력이 안돼어서??..
-
-  let a = setTimeout(() => {
-    localStorage.setItem('watched', JSON.stringify([]));
-  }, 1);
-  clearTimeout(a);
-
+  //if문으로 detail페이지 갔다가 홈으로 오면 localstorage 초기화 되는거 막음
+  // if (localStorage.watched.length < 1) {
   useEffect(() => {
-    //if문으로 detail페이지 갔다가 홈으로 오면 localstorage 초기화 되는거 막음
-    if (localStorage.watched.length <= 2) {
-      //콘솔 홈화면 localStorage 콘솔로 찍어서 2나옴
-      //2보다 작거나같으면 로컬 빈배열 저장
-      return localStorage.setItem('watched', JSON.stringify([]));
+    if (get_local === null) {
+      localStorage.setItem("watched", JSON.stringify([]));
     }
-    //아니면 저장된 로컬 가져옴
-    localStorage.getItem('watched');
-
-    // console.log(localStorage.getItem('watched')); //[1]출력됨
   }, []);
   //====================최근본 항목 작업중===================================
-  let watched = localStorage.getItem('watched');
-  watched = JSON.parse(watched);
+  // let watched = localStorage.getItem("watched");
+  // watched = JSON.parse(watched);
+  // console.log(localStorage.length);
 
   // console.log(watched); //[1]출력
   // let watchedList = watched.map((list) => {
@@ -69,6 +62,31 @@ function App() {
 
   const [shoes, setShoes] = useState(Data);
   const navigate = useNavigate();
+  //==================axios 버전=======================
+  //유저 api 데이터 가져와서 우측 상단 출력
+  // axios
+  //   .get(
+  //     "https://raw.githubusercontent.com/daegons/react_shopMall/main/userData.json"
+  //   )
+  //   .then((res) => {
+  //     console.log(res.data);
+  //   });
+
+  //====================React Query버전=====================
+  //React Query사용시
+  //장점1. 성공/실패/로딩 쉽게 파악 가능
+  let result = useQuery("작명", () => {
+    return axios
+      .get(
+        "https://raw.githubusercontent.com/daegons/react_shopMall/main/userData.json"
+      )
+      .then((res) => {
+        return res.data;
+      });
+  });
+  console.log(result.data);
+  console.log(result.isLoading);
+  console.log(result.error);
 
   return (
     <div className="App">
@@ -80,39 +98,46 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link
               onClick={() => {
-                navigate('/');
+                navigate("/");
               }}
             >
               홈
             </Nav.Link>
-            <Nav.Link
+            {/* <Nav.Link
               onClick={() => {
-                navigate('/detail/1');
+                navigate("/detail/1");
               }}
             >
               상세페이지
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link
               onClick={() => {
-                navigate('/cart');
+                navigate("/cart");
               }}
             >
               장바구니
             </Nav.Link>
           </Nav>
+          <Nav className="ms-auto">
+            {result.isLoading ? "로딩중" : result.data.name}
+          </Nav>
         </Container>
       </Navbar>
       <div className="watchedList">
-        {watched.map((list, i) => {
-          console.log(list);
-          // i 값은 0,1,2
-          //list = 객체 형식으로 012 순회
-          return (
-            <div key={i}>
-              <img src={`${road}/assets/${list}.jpg`} alt="지금본 상품" />
-            </div>
-          );
-        })}
+        {get_local !== null
+          ? get_local.map((a, i) => {
+              return (
+                <div>
+                  <img
+                    src={`${road}/assets/${i + 1}.jpg`}
+                    alt="상품 이미지"
+                    width="80%"
+                  />
+                  <p>최근 본 상품</p>
+                </div>
+              );
+            })
+          : null}
       </div>
       <Routes>
         <Route path="/" element={<Main shoes={shoes} setShoes={setShoes} />} />
